@@ -2,6 +2,7 @@ package ua.varguss.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,13 @@ public class Building {
     @Setter
     @NonNull
     private Elevator elevator;
+
+    static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
+
+    {
+        for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
+            persons.put(i, new ArrayList<>());
+    }
 
     public void addPerson(Person person) {
         persons.get(person.getCurrentFloor()).add(person);

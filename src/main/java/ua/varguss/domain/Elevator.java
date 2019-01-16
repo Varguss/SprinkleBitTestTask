@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ua.varguss.domain.Building.*;
+
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -21,8 +23,6 @@ public class Elevator {
 
     @Setter
     private boolean isStopped;
-
-    private static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
 
     {
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
@@ -37,9 +37,11 @@ public class Elevator {
      * Начать движение лифта.
      */
     void move() {
-        validateDirection();
+        validateMoving();
 
         if (!isStopped) {
+            validateDirection();
+
             switch (direction) {
                 case UP: {
                     moveUp();
@@ -51,18 +53,26 @@ public class Elevator {
         }
     }
 
+    private void validateMoving() {
+        if (!isAnySelectedFloor())
+            isStopped = true;
+    }
     /**
      * Если продолжать движение в раннее выбранном направлении бессмысленно, направление движения изменяется на противоположное.
      */
     private void validateDirection() {
         switch (direction) {
             case UP: {
-                if (!isNotAnySelectedFloorAbove())
+                if (!isAnySelectedFloorAbove()) {
                     direction = Direction.DOWN;
+                    System.out.println("Движение вверх бессмысленно. Смена направления на " + direction.name());
+                }
             } break;
             case DOWN: {
-                if (!isNotAnySelecteFloorBelow())
+                if (!isAnySelectedFloorBelow()) {
                     direction = Direction.UP;
+                    System.out.println("Движение вниз бессмысленно. Смена направления на " + direction.name());
+                }
             } break;
         }
     }
@@ -70,11 +80,15 @@ public class Elevator {
      * Движение лифта вверх.
      */
     private void moveUp() {
+        System.out.println("Лифт: движение вверх!");
         currentDistance += speed;
+
 
         if (currentDistance == FLOOR_HEIGHT) {
             currentDistance = 0;
             currentFloor++;
+
+            System.out.println("Лифт: прибытие на следующий этаж - " + currentFloor);
         }
     }
 
@@ -82,11 +96,14 @@ public class Elevator {
      * Движение лифта вниз.
      */
     private void moveDown() {
+        System.out.println("Лифт: движение вниз!");
         currentDistance -= speed;
 
         if (currentDistance == -FLOOR_HEIGHT) {
             currentDistance = 0;
             currentFloor--;
+
+            System.out.println("Лифт: прибытие на следующий этаж - " + currentFloor);
         }
     }
 
@@ -94,7 +111,7 @@ public class Elevator {
      * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи выше текущего этажа.
      * @return true - вверху есть ещё выбранные этажи, false - нет.
      */
-    private boolean isNotAnySelectedFloorAbove() {
+    private boolean isAnySelectedFloorAbove() {
         if (currentFloor != MAX_FLOOR)
             for (int i = currentFloor + 1; i <= MAX_FLOOR; i++)
                 if (selectedFloors.get(i))
@@ -107,11 +124,23 @@ public class Elevator {
      * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи ниже текущего этажа.
      * @return true - внизу есть ещё выбранные этажи, false - нет.
      */
-    private boolean isNotAnySelecteFloorBelow() {
+    private boolean isAnySelectedFloorBelow() {
         if (currentFloor != MIN_FLOOR)
             for (int i = currentFloor - 1; i >= MIN_FLOOR; i--)
                 if (selectedFloors.get(i))
                     return true;
+
+        return false;
+    }
+
+    /**
+     * Используется для определения, есть ли смысл продолжать движение лифта вообще. Если нет выбранных этажей или этажей, где лифт был вызван, движение бессмыслено.
+     * @return true - лифту нужно на какой-либо этаж, false - не нужно.
+     */
+    private boolean isAnySelectedFloor() {
+        for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
+            if (selectedFloors.get(i))
+                return true;
 
         return false;
     }
@@ -128,10 +157,13 @@ public class Elevator {
      * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
      */
     void releasePeople() {
-        personsInside.forEach((person) -> {
-            if (person.getDesiredFloor() == this.currentFloor)
-                person.getOut();
-        });
+//        personsInside.forEach((person) -> {
+//            if (person.getDesiredFloor() == this.currentFloor)
+//                person.getOut();
+//        });
+        for (int i = 0; i < personsInside.size(); i++)
+            if (personsInside.get(i).getDesiredFloor() == this.currentFloor)
+                personsInside.get(i--).getOut();
 
         selectedFloors.put(currentFloor, false);
     }

@@ -14,8 +14,7 @@ import java.util.List;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws InterruptedException {
         Building building = new Building(new Elevator());
 
         Person firstPerson = new Person("Stephan", 1, 4);
@@ -25,5 +24,11 @@ public class App
         building.addPerson(firstPerson);
         building.addPerson(secondPerson);
         building.addPerson(thirdPerson);
+
+        while (true) {
+            building.moveElevator();
+
+            Thread.sleep(1000);
+        }
     }
 }
