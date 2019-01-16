@@ -167,10 +167,6 @@ public class Elevator {
      * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
      */
     void releasePeople() {
-//        personsInside.forEach((person) -> {
-//            if (person.getDesiredFloor() == this.currentFloor)
-//                person.getOut();
-//        });
         for (int i = 0; i < personsInside.size(); i++)
             if (personsInside.get(i).getDesiredFloor() == this.currentFloor)
                 personsInside.get(i--).getOut();
