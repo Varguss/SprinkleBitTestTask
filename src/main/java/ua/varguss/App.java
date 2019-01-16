@@ -4,10 +4,6 @@ import ua.varguss.domain.Building;
 import ua.varguss.domain.Elevator;
 import ua.varguss.domain.Person;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Hello world!
  *
