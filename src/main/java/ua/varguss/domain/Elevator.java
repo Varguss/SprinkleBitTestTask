@@ -91,9 +91,8 @@ public class Elevator {
      * Движение лифта вверх.
      */
     private void moveUp() {
-        System.out.println("Лифт: движение вверх!");
         currentDistance += speed;
-
+        System.out.println("Лифт: движение вверх! Пройдено " + currentDistance + "м по шахте, осталось " + (FLOOR_HEIGHT - currentDistance) + "м до следующего этажа");
 
         if (currentDistance == FLOOR_HEIGHT) {
             currentDistance = 0;
@@ -107,8 +106,8 @@ public class Elevator {
      * Движение лифта вниз.
      */
     private void moveDown() {
-        System.out.println("Лифт: движение вниз!");
         currentDistance -= speed;
+        System.out.println("Лифт: движение вниз! Пройдено " + (-currentDistance) + "м по шахте, осталось " + (FLOOR_HEIGHT + currentDistance) + "м до следующего этажа");
 
         if (currentDistance == -FLOOR_HEIGHT) {
             currentDistance = 0;
