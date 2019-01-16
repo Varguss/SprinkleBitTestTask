@@ -3,8 +3,6 @@ package ua.varguss.domain;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class ElevatorTest {
@@ -12,7 +10,6 @@ public class ElevatorTest {
 
     private Person firstPerson = new Person("Stephan", 1, 4);
     private Person secondPerson = new Person("Ivan", 3, 2);
-    private Person thirdPerson = new Person("Leonardo", 4, 1);
 
     @Before
     public void setUp() throws Exception {
