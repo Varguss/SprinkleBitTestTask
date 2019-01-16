@@ -44,4 +44,10 @@ public class Person {
         if (isInsideElevator())
             elevator.setStopped(!elevator.isStopped());
     }
+
+    public void callElevator(Elevator elevator) {
+        if (!isInsideElevator()) {
+            elevator.receiveCall(currentFloor);
+        }
+    }
 }

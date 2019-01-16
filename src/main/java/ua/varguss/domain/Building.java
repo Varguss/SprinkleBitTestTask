@@ -26,7 +26,7 @@ public class Building {
             fillElevatorWithPeople();
         }
 
-
+        elevator.move();
     }
 
     private void fillElevatorWithPeople() {

@@ -74,6 +74,40 @@ public class Elevator {
     }
 
     /**
+     * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи выше текущего этажа.
+     * @return true - вверху есть ещё выбранные этажи, false - нет.
+     */
+    private boolean isAnySelectedFloorAbove() {
+        if (currentFloor != MAX_FLOOR)
+            for (int i = currentFloor + 1; i <= MAX_FLOOR; i++)
+                if (selectedFloors.get(i))
+                    return true;
+
+        return false;
+    }
+
+    /**
+     * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи ниже текущего этажа.
+     * @return true - внизу есть ещё выбранные этажи, false - нет.
+     */
+    private boolean isAnySelecteFloorBelow() {
+        if (currentFloor != MIN_FLOOR)
+            for (int i = currentFloor - 1; i >= MIN_FLOOR; i--)
+                if (selectedFloors.get(i))
+                    return true;
+
+        return false;
+    }
+
+    /**
+     * Если лифт вызвали из вне, он должен доехать до этажа, где его вызвали.
+     * @param floor Этаж, с которого его вызвали.
+     */
+    void receiveCall(int floor) {
+        selectedFloors.put(floor, true);
+    }
+
+    /**
      * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
      */
     void releasePeople() {
