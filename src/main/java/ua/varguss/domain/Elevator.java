@@ -53,7 +53,9 @@ public class Elevator {
         }
     }
 
-
+    /**
+     * Если выбранные этажи и вызовы закончились, лифт останавливает работу.
+     */
     private void validateMoving() {
         if (!isAnySelectedFloor() && !isStopped) {
             isStopped = true;
