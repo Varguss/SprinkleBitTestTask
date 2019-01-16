@@ -23,12 +23,17 @@ public class Building {
         makePeopleCallElevator();
 
         if (!elevator.isMoving()) {
+            updatePeopleInsideElevatorCurrentFloor();
             elevator.releasePeople();
             cleanArrivedPeople();
             fillElevatorWithPeople();
         }
 
         elevator.move();
+    }
+
+    private void updatePeopleInsideElevatorCurrentFloor() {
+        elevator.getPersonsInside().forEach(person -> person.setCurrentFloor(elevator.getCurrentFloor()));
     }
 
     private void fillElevatorWithPeople() {

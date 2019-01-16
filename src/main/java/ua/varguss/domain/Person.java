@@ -2,6 +2,7 @@ package ua.varguss.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -9,8 +10,11 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Person {
     private String name;
-    private int currentFloor, desiredFloor;
+    private int desiredFloor;
     private Elevator elevator;
+
+    @Setter
+    private int currentFloor;
 
     public Person(String name, int currentFloor, int desiredFloor) {
         this.name = name;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
     private int currentFloor = 1, speed = 1, currentDistance = 0;
     private Direction direction = Direction.UP;
-    private List<Person> personsInside;
+    private List<Person> personsInside = new ArrayList<>();
 
     @Setter
     private boolean isStopped;
@@ -36,11 +37,35 @@ public class Elevator {
      * Начать движение лифта.
      */
     void move() {
-        if (!isStopped) {
+        validateDirection();
 
+        if (!isStopped) {
+            switch (direction) {
+                case UP: {
+                    moveUp();
+                } break;
+                case DOWN: {
+                    moveDown();
+                } break;
+            }
         }
     }
 
+    /**
+     * Если продолжать движение в раннее выбранном направлении бессмысленно, направление движения изменяется на противоположное.
+     */
+    private void validateDirection() {
+        switch (direction) {
+            case UP: {
+                if (!isNotAnySelectedFloorAbove())
+                    direction = Direction.DOWN;
+            } break;
+            case DOWN: {
+                if (!isNotAnySelecteFloorBelow())
+                    direction = Direction.UP;
+            } break;
+        }
+    }
     /**
      * Движение лифта вверх.
      */
@@ -69,7 +94,7 @@ public class Elevator {
      * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи выше текущего этажа.
      * @return true - вверху есть ещё выбранные этажи, false - нет.
      */
-    private boolean isAnySelectedFloorAbove() {
+    private boolean isNotAnySelectedFloorAbove() {
         if (currentFloor != MAX_FLOOR)
             for (int i = currentFloor + 1; i <= MAX_FLOOR; i++)
                 if (selectedFloors.get(i))
@@ -82,7 +107,7 @@ public class Elevator {
      * Используется внутри алгоритма движения лифта для определения, есть ли ещё выбранные этажи ниже текущего этажа.
      * @return true - внизу есть ещё выбранные этажи, false - нет.
      */
-    private boolean isAnySelecteFloorBelow() {
+    private boolean isNotAnySelecteFloorBelow() {
         if (currentFloor != MIN_FLOOR)
             for (int i = currentFloor - 1; i >= MIN_FLOOR; i--)
                 if (selectedFloors.get(i))
