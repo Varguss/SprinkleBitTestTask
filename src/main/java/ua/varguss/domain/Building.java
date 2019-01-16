@@ -19,12 +19,8 @@ public class Building {
         persons.get(person.getCurrentFloor()).add(person);
     }
 
-    public void cleanArrivedPeople() {
-        persons.values().forEach(peopleOnFloor -> peopleOnFloor.removeIf(Person::isArrived));
-    }
-
     public void moveElevator() {
-        if (!elevator.isMoving() && !elevator.isStopped()) {
+        if (!elevator.isMoving()) {
             elevator.releasePeople();
             cleanArrivedPeople();
             fillElevatorWithPeople();
@@ -35,5 +31,9 @@ public class Building {
 
     private void fillElevatorWithPeople() {
         persons.get(elevator.getCurrentFloor()).forEach(person -> person.getIn(elevator));
+    }
+
+    private void cleanArrivedPeople() {
+        persons.values().forEach(peopleOnFloor -> peopleOnFloor.removeIf(Person::isArrived));
     }
 }

@@ -28,20 +28,30 @@ public class Elevator {
             selectedFloors.put(i, false);
     }
 
+    /**
+     * Есть лифт ещё не сдвинулся с места и кнопка STOP не нажата, лифт не движется.
+     * @return true - лифт в движении, false - лифт остановлен.
+     */
     public boolean isMoving() {
-        return currentDistance != 0;
+        return currentDistance != 0 && !isStopped;
     }
 
     private enum Direction {
         UP, DOWN
     }
 
+    /**
+     * Начать движение лифта.
+     */
     public void move() {
         if (!isStopped) {
 
         }
     }
 
+    /**
+     * Движение лифта вверх.
+     */
     private void moveUp() {
         currentDistance += speed;
 
@@ -51,6 +61,9 @@ public class Elevator {
         }
     }
 
+    /**
+     * Движение лифта вниз.
+     */
     private void moveDown() {
         currentDistance -= speed;
 
@@ -60,6 +73,9 @@ public class Elevator {
         }
     }
 
+    /**
+     * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
+     */
     void releasePeople() {
         personsInside.forEach((person) -> {
             if (person.getDesiredFloor() == this.currentFloor)
@@ -69,12 +85,20 @@ public class Elevator {
         selectedFloors.put(currentFloor, false);
     }
 
+    /**
+     * Человек входит в лифт и нажимает на кнопку нужного этажа.
+     * @param person Человек, зашедший в лифт.
+     */
     void addPerson(Person person) {
         personsInside.add(person);
 
         selectedFloors.put(person.getDesiredFloor(), true);
     }
 
+    /**
+     * Человек покидает лифт.
+     * @param person Человек, покидающий лифт.
+     */
     void removePerson(Person person) {
         personsInside.remove(person);
     }
