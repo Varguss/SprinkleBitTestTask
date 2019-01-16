@@ -20,10 +20,5 @@ public class App
         Person firstPerson = new Person("Stephan", 1, 4);
         Person secondPerson = new Person("Ivan", 3, 2);
         Person thirdPerson = new Person("Leonardo", 4, 1);
-
-        List<Person> persons = new ArrayList<>(Arrays.asList(firstPerson, secondPerson, thirdPerson));
-        persons.forEach(person -> person.getIn(elevator));
-
-
     }
 }

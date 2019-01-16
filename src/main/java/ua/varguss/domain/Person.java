@@ -18,22 +18,22 @@ public class Person {
         this.desiredFloor = desiredFloor;
     }
 
-    public boolean isInsideElevator() {
+    boolean isInsideElevator() {
         return elevator != null;
     }
 
-    public boolean isArrived() {
+    boolean isArrived() {
         return currentFloor == desiredFloor;
     }
 
-    public void getOut() {
+    void getOut() {
         if (elevator != null) {
             elevator.removePerson(this);
             elevator = null;
         }
     }
 
-    public void getIn(Elevator elevator) {
+    void getIn(Elevator elevator) {
         if (this.elevator == null) {
             elevator.addPerson(this);
             this.elevator = elevator;
@@ -45,7 +45,7 @@ public class Person {
             elevator.setStopped(!elevator.isStopped());
     }
 
-    public void callElevator(Elevator elevator) {
+    void callElevator(Elevator elevator) {
         if (!isInsideElevator()) {
             elevator.receiveCall(currentFloor);
         }

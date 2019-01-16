@@ -28,14 +28,6 @@ public class Elevator {
             selectedFloors.put(i, false);
     }
 
-    /**
-     * Есть лифт ещё не сдвинулся с места и кнопка STOP не нажата, лифт не движется.
-     * @return true - лифт в движении, false - лифт остановлен.
-     */
-    public boolean isMoving() {
-        return currentDistance != 0 && !isStopped;
-    }
-
     private enum Direction {
         UP, DOWN
     }
@@ -43,7 +35,7 @@ public class Elevator {
     /**
      * Начать движение лифта.
      */
-    public void move() {
+    void move() {
         if (!isStopped) {
 
         }
@@ -135,5 +127,13 @@ public class Elevator {
      */
     void removePerson(Person person) {
         personsInside.remove(person);
+    }
+
+    /**
+     * Есть лифт ещё не сдвинулся с места и кнопка STOP не нажата, лифт не движется.
+     * @return true - лифт в движении, false - лифт остановлен.
+     */
+    boolean isMoving() {
+        return currentDistance != 0 && !isStopped;
     }
 }
