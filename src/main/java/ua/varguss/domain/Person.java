@@ -12,6 +12,7 @@ public class Person {
     private String name;
     private int desiredFloor;
     private Elevator elevator;
+    private boolean calledElevator;
 
     @Setter
     private int currentFloor;
@@ -35,12 +36,17 @@ public class Person {
             elevator.removePerson(this);
             elevator = null;
         }
+
+        System.out.println("Человек по имени '" + name + "' вышел из лифта на " + currentFloor + " этаже");
     }
 
     void getIn(Elevator elevator) {
         if (this.elevator == null) {
             elevator.addPerson(this);
             this.elevator = elevator;
+            calledElevator = false;
+
+            System.out.println("Человек по имени '" + name + "' вошел в лифт на " + currentFloor + " этаже");
         }
     }
 
@@ -52,6 +58,8 @@ public class Person {
     void callElevator(Elevator elevator) {
         if (!isInsideElevator()) {
             elevator.receiveCall(currentFloor);
+            calledElevator = true;
+            System.out.println("Человек по имени '" + name + "' позвал лифт на " + currentFloor + " этаж");
         }
     }
 }

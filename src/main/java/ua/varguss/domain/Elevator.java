@@ -53,9 +53,12 @@ public class Elevator {
         }
     }
 
+
     private void validateMoving() {
-        if (!isAnySelectedFloor())
+        if (!isAnySelectedFloor() && !isStopped) {
             isStopped = true;
+            System.out.println("Лифт: выбранных этажов или вызовов нет, остановка");
+        }
     }
     /**
      * Если продолжать движение в раннее выбранном направлении бессмысленно, направление движения изменяется на противоположное.
@@ -65,13 +68,13 @@ public class Elevator {
             case UP: {
                 if (!isAnySelectedFloorAbove()) {
                     direction = Direction.DOWN;
-                    System.out.println("Движение вверх бессмысленно. Смена направления на " + direction.name());
+                    System.out.println("Лифт: движение вверх бессмысленно. Смена направления на " + direction.name());
                 }
             } break;
             case DOWN: {
                 if (!isAnySelectedFloorBelow()) {
                     direction = Direction.UP;
-                    System.out.println("Движение вниз бессмысленно. Смена направления на " + direction.name());
+                    System.out.println("Лифт: движение вниз бессмысленно. Смена направления на " + direction.name());
                 }
             } break;
         }

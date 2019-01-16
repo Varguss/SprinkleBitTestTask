@@ -25,10 +25,14 @@ public class Building {
 
     public void addPerson(Person person) {
         persons.get(person.getCurrentFloor()).add(person);
+
+        System.out.println("Человек по имени '" + person.getName() + "' в доме. Сейчас он на " + person.getCurrentFloor() + " этаже, нужно на " + person.getDesiredFloor() + " этаж");
     }
 
     public void moveElevator() {
         makePeopleCallElevator();
+
+        elevator.move();
 
         if (!elevator.isMoving()) {
             updatePeopleInsideElevatorCurrentFloor();
@@ -36,8 +40,6 @@ public class Building {
             cleanArrivedPeople();
             fillElevatorWithPeople();
         }
-
-        elevator.move();
     }
 
     private void updatePeopleInsideElevatorCurrentFloor() {
@@ -54,7 +56,7 @@ public class Building {
 
     private void makePeopleCallElevator() {
         persons.values().forEach(people -> people.forEach(person -> {
-            if (!person.isInsideElevator())
+            if (!person.isInsideElevator() && !person.isCalledElevator())
                 person.callElevator(elevator);
         }));
     }
