@@ -51,8 +51,10 @@ public class Person {
     }
 
     public void pushStopButton() {
-        if (isInsideElevator())
+        if (isInsideElevator()) {
             elevator.setStopped(!elevator.isStopped());
+            System.out.println("Человек по имени '" + name + "' нажал на кнопку STOP. Лифт " + (elevator.isStopped() ? "остановился" : "продолжает работу"));
+        }
     }
 
     void callElevator(Elevator elevator) {
