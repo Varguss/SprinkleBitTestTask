@@ -12,16 +12,36 @@ public class Person {
     private int currentFloor, desiredFloor;
     private Elevator elevator;
 
+    public Person(String name, int currentFloor, int desiredFloor) {
+        this.name = name;
+        this.currentFloor = currentFloor;
+        this.desiredFloor = desiredFloor;
+    }
+
     public boolean isInsideElevator() {
         return elevator != null;
     }
 
+    public boolean isArrived() {
+        return currentFloor == desiredFloor;
+    }
+
     public void getOut() {
-        elevator = null;
+        if (elevator != null) {
+            elevator.removePerson(this);
+            elevator = null;
+        }
     }
 
     public void getIn(Elevator elevator) {
-        if (this.elevator == null)
+        if (this.elevator == null) {
+            elevator.addPerson(this);
             this.elevator = elevator;
+        }
+    }
+
+    public void pushStopButton() {
+        if (isInsideElevator())
+            elevator.setStopped(!elevator.isStopped());
     }
 }
