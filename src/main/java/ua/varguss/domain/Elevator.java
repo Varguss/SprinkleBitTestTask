@@ -12,6 +12,9 @@ import java.util.Map;
 
 import static ua.varguss.domain.Building.*;
 
+/**
+ * Лифт
+ */
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -29,6 +32,9 @@ public class Elevator {
             selectedFloors.put(i, false);
     }
 
+    /**
+     * Направления лифта
+     */
     private enum Direction {
         UP, DOWN
     }

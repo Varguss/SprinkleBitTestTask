@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Человек
+ */
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -23,16 +26,27 @@ public class Person {
         this.desiredFloor = desiredFloor;
     }
 
+    /**
+     * Человек внутри лифта?
+     * @return true - внутри лифта, false - не в лифте.
+     */
     boolean isInsideElevator() {
         return elevator != null;
     }
 
+    /**
+     * Человек прибыл на нужный этаж?
+     * @return true - прибыл, false - не прибыл.
+     */
     boolean isArrived() {
         return currentFloor == desiredFloor;
     }
 
+    /**
+     * Выйти из лифта, если раннее был в лифте.
+     */
     void getOut() {
-        if (elevator != null) {
+        if (isInsideElevator()) {
             elevator.removePerson(this);
             elevator = null;
         }
@@ -40,8 +54,12 @@ public class Person {
         System.out.println("Человек по имени '" + name + "' вышел из лифта на " + currentFloor + " этаже");
     }
 
+    /**
+     * Войти в лифт, если ещё не в лифте.
+     * @param elevator Лифт.
+     */
     void getIn(Elevator elevator) {
-        if (this.elevator == null) {
+        if (!isInsideElevator()) {
             elevator.addPerson(this);
             this.elevator = elevator;
             calledElevator = false;
@@ -50,6 +68,9 @@ public class Person {
         }
     }
 
+    /**
+     * Нажать на кнопку STOP лифта, если в лифте.
+     */
     public void pushStopButton() {
         if (isInsideElevator()) {
             elevator.setStopped(!elevator.isStopped());
@@ -57,6 +78,10 @@ public class Person {
         }
     }
 
+    /**
+     * Позвать лифт на текущий этаж.
+     * @param elevator Лифт.
+     */
     void callElevator(Elevator elevator) {
         if (!isInsideElevator()) {
             elevator.receiveCall(currentFloor);
