@@ -38,7 +38,7 @@ public class Person {
      * Человек прибыл на нужный этаж?
      * @return true - прибыл, false - не прибыл.
      */
-    boolean isArrived() {
+    public boolean isArrived() {
         return currentFloor == desiredFloor;
     }
 

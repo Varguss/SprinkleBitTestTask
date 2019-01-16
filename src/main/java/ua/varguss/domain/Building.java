@@ -48,14 +48,16 @@ public class Building {
     public void moveElevator() {
         makePeopleCallElevator();
 
-        elevator.move();
-
         if (!elevator.isMoving()) {
-            updatePeopleInsideElevatorCurrentFloor();
+            fillElevatorWithPeople();
             elevator.releasePeople();
             cleanArrivedPeople();
-            fillElevatorWithPeople();
         }
+
+        elevator.move();
+
+        if (!elevator.isMoving())
+            updatePeopleInsideElevatorCurrentFloor();
     }
 
     /**

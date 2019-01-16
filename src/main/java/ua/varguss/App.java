@@ -21,9 +21,8 @@ public class App
         building.addPerson(secondPerson);
         building.addPerson(thirdPerson);
 
-        while (true) {
+        while (!building.getElevator().isStopped()) {
             building.moveElevator();
-
             Thread.sleep(1000);
         }
     }
