@@ -20,6 +20,8 @@ public class Building {
     }
 
     public void moveElevator() {
+        makePeopleCallElevator();
+
         if (!elevator.isMoving()) {
             elevator.releasePeople();
             cleanArrivedPeople();
@@ -35,5 +37,12 @@ public class Building {
 
     private void cleanArrivedPeople() {
         persons.values().forEach(peopleOnFloor -> peopleOnFloor.removeIf(Person::isArrived));
+    }
+
+    private void makePeopleCallElevator() {
+        persons.values().forEach(people -> people.forEach(person -> {
+            if (!person.isInsideElevator())
+                person.callElevator(elevator);
+        }));
     }
 }
