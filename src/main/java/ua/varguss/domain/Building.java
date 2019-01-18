@@ -32,13 +32,47 @@ public class Building {
     @ToString
     @EqualsAndHashCode
     @RequiredArgsConstructor
-    private class Floor {
+    class Floor {
         private List<Person> people = new ArrayList<>();
 
         @NonNull
         private int number;
         @NonNull
         private int height;
+        @NonNull
+        private AbstractOuterPanel outerPanel;
+
+        @Getter
+        @Setter
+        @RequiredArgsConstructor
+        abstract class AbstractOuterPanel {
+            @NonNull
+            private Elevator elevator;
+
+            public abstract void callElevator(int desiredFloor);
+        }
+
+        class UpDownPanel extends AbstractOuterPanel {
+            public UpDownPanel(@NonNull Elevator elevator) {
+                super(elevator);
+            }
+
+            @Override
+            public void callElevator(int desiredFloor) {
+                // TODO: don't forget to implement
+            }
+        }
+
+        class SingleButtonPanel extends AbstractOuterPanel {
+            public SingleButtonPanel(@NonNull Elevator elevator) {
+                super(elevator);
+            }
+
+            @Override
+            public void callElevator(int desiredFloor) {
+                // TODO: don't forget to implement
+            }
+        }
     }
 
     {
