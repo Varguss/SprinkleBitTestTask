@@ -27,6 +27,20 @@ public class Building {
 
     static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
 
+    @Getter
+    @Setter
+    @ToString
+    @EqualsAndHashCode
+    @RequiredArgsConstructor
+    private class Floor {
+        private List<Person> people = new ArrayList<>();
+
+        @NonNull
+        private int number;
+        @NonNull
+        private int height;
+    }
+
     {
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
             persons.put(i, new ArrayList<>());
