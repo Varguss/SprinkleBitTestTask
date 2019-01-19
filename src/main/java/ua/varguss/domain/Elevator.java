@@ -1,11 +1,10 @@
 package ua.varguss.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ua.varguss.domain.panel.inside.AbstractInnerPanel;
+import ua.varguss.domain.panel.inside.AllFloorsInnerPanel;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +16,8 @@ import static ua.varguss.domain.Building.*;
  * Лифт
  */
 @Getter
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
     private Map<Integer, Boolean> selectedFloorsByVip = new HashMap<>();
@@ -27,6 +26,15 @@ public class Elevator {
     private List<Person> people = new ArrayList<>();
     private boolean isVipInside = false;
     private AbstractInnerPanel controlPanel;
+
+    public Elevator(Class<? extends AbstractInnerPanel> controlPanelClass) {
+        try {
+            this.controlPanel = controlPanelClass.getConstructor(Elevator.class).newInstance(this);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            this.controlPanel = new AllFloorsInnerPanel(this);
+            e.printStackTrace();
+        }
+    }
 
     @Setter
     private boolean isStopped;

@@ -1,6 +1,10 @@
 package ua.varguss.domain;
 
 import lombok.*;
+import ua.varguss.domain.panel.inside.AllFloorsInnerPanel;
+import ua.varguss.domain.panel.inside.FirstLastFloorsInnerPanel;
+import ua.varguss.domain.panel.inside.VipAllFloorsInnerPanel;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +12,6 @@ import java.util.Map;
  * Здание (класс-фасад) для объединения людей, которые внутри здания, и лифта, который пренадлежит этому зданию.
  */
 @Getter
-@RequiredArgsConstructor
 public class Building {
     /**
      * Ключ - номер этажа, значение - этаж.
@@ -18,15 +21,17 @@ public class Building {
     /**
      * Лифт внутри здания.
      */
-    @Setter
-    @NonNull
-    private Elevator elevator;
+
+    private Elevator[] elevators = new Elevator[2];
 
     static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
 
     {
+        elevators[0] = new Elevator(VipAllFloorsInnerPanel.class);
+        elevators[1] = new Elevator(FirstLastFloorsInnerPanel.class);
+
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
-            floors.put(i, new Floor(elevator, i, FLOOR_HEIGHT));
+            floors.put(i, new Floor(elevators[0], i, FLOOR_HEIGHT));
     }
 
     /**
@@ -44,15 +49,15 @@ public class Building {
     public void moveElevator() {
         makePeopleCallElevator();
 
-        if (!elevator.isMoving()) {
+        if (!elevators[0].isMoving()) {
             fillElevatorWithPeople();
-            elevator.releasePeople();
+            elevators[0].releasePeople();
             cleanArrivedPeople();
         }
 
-        elevator.move();
+        elevators[0].move();
 
-        if (!elevator.isMoving())
+        if (!elevators[0].isMoving())
             updatePeopleInsideElevatorCurrentFloor();
     }
 
@@ -60,14 +65,14 @@ public class Building {
      * Если лифт прибыл на новый этаж, значит, люди в этом лифте тоже прибыли на новый этаж.
      */
     private void updatePeopleInsideElevatorCurrentFloor() {
-        elevator.getPeople().forEach(person -> person.setCurrentFloor(elevator.getCurrentFloor()));
+        elevators[0].getPeople().forEach(person -> person.setCurrentFloor(elevators[0].getCurrentFloor()));
     }
 
     /**
      * Если на текущем этаже лифта есть люди, они входят в лифт.
      */
     private void fillElevatorWithPeople() {
-        floors.get(elevator.getCurrentFloor()).getPeople().forEach(person -> person.getIn(elevator));
+        floors.get(elevators[0].getCurrentFloor()).getPeople().forEach(person -> person.getIn(elevators[0]));
     }
 
     /**
@@ -83,7 +88,7 @@ public class Building {
     private void makePeopleCallElevator() {
         floors.values().forEach(floor -> floor.getPeople().forEach(person -> {
             if (!person.isInsideElevator() && !person.isCalledElevator())
-                person.callElevator(elevator);
+                person.callElevator(elevators[0]);
         }));
     }
 }
