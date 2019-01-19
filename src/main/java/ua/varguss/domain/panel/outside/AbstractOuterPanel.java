@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import ua.varguss.domain.Call;
 import ua.varguss.domain.Elevator;
 
 @Getter
@@ -12,7 +11,7 @@ import ua.varguss.domain.Elevator;
 @RequiredArgsConstructor
 public abstract class AbstractOuterPanel {
     @NonNull
-    protected Elevator elevator;
+    protected Elevator[] elevators;
 
-    public abstract void callElevator(Call call);
+    public abstract void callElevator(int floor);
 }

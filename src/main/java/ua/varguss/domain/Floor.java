@@ -21,8 +21,8 @@ public class Floor {
     @NonNull
     private int height;
 
-    public Floor(Elevator elevator, int number, int height) {
-        this.outerPanel = Math.random() > 0.5d ? new UpDownPanel(elevator) : new SingleButtonPanel(elevator);
+    public Floor(Elevator[] elevators, int number, int height) {
+        this.outerPanel = Math.random() > 0.5d ? new UpDownPanel(elevators) : new SingleButtonPanel(elevators);
         this.number = number;
         this.height = height;
     }

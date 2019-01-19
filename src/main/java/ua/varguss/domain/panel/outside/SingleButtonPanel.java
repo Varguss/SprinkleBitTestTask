@@ -5,12 +5,12 @@ import ua.varguss.domain.Call;
 import ua.varguss.domain.Elevator;
 
 public class SingleButtonPanel extends AbstractOuterPanel {
-    public SingleButtonPanel(@NonNull Elevator elevator) {
-        super(elevator);
+    public SingleButtonPanel(@NonNull Elevator[] elevators) {
+        super(elevators);
     }
 
     @Override
-    public void callElevator(Call call) {
+    public void callElevator(int floor) {
         // TODO: don't forget to implement
     }
 }

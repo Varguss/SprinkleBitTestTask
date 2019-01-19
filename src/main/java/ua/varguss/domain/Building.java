@@ -19,19 +19,18 @@ public class Building {
     private Map<Integer, Floor> floors = new HashMap<>();
 
     /**
-     * Лифт внутри здания.
+     * Лифты внутри здания.
      */
-
     private Elevator[] elevators = new Elevator[2];
 
-    static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
+    public static final int MIN_FLOOR = 1, MAX_FLOOR = 10, FLOOR_HEIGHT = 4;
 
     {
         elevators[0] = new Elevator(VipAllFloorsInnerPanel.class);
         elevators[1] = new Elevator(FirstLastFloorsInnerPanel.class);
 
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
-            floors.put(i, new Floor(elevators[0], i, FLOOR_HEIGHT));
+            floors.put(i, new Floor(elevators, i, FLOOR_HEIGHT));
     }
 
     /**
@@ -87,8 +86,7 @@ public class Building {
      */
     private void makePeopleCallElevator() {
         floors.values().forEach(floor -> floor.getPeople().forEach(person -> {
-            if (!person.isInsideElevator() && !person.isCalledElevator())
-                person.callElevator(elevators[0]);
+            person.callElevator(floor.getOuterPanel());
         }));
     }
 }

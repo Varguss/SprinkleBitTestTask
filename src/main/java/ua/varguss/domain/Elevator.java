@@ -21,11 +21,17 @@ import static ua.varguss.domain.Building.*;
 public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
     private Map<Integer, Boolean> selectedFloorsByVip = new HashMap<>();
+    private Map<Integer, Call> calledByFloors = new HashMap<>();
     private int currentFloor = 1, speed = 1, currentDistance = 0, currentWeight = 0, weightLimit = 700;
     private Direction direction = Direction.UP;
     private List<Person> people = new ArrayList<>();
-    private boolean isVipInside = false;
     private AbstractInnerPanel controlPanel;
+
+    @Setter
+    private boolean isStopped;
+
+    @Setter
+    private boolean isVipInside;
 
     public Elevator(Class<? extends AbstractInnerPanel> controlPanelClass) {
         try {
@@ -34,12 +40,7 @@ public class Elevator {
             this.controlPanel = new AllFloorsInnerPanel(this);
             e.printStackTrace();
         }
-    }
 
-    @Setter
-    private boolean isStopped;
-
-    {
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++) {
             selectedFloors.put(i, false);
             selectedFloorsByVip.put(i, false);
@@ -71,6 +72,15 @@ public class Elevator {
                 } break;
             }
         }
+    }
+
+    public void selectFloor(int floor) {
+        selectedFloors.put(floor, true);
+    }
+
+    public void selectVipFloor(int floor) {
+        selectedFloorsByVip.put(floor, true);
+        isVipInside = true;
     }
 
     /**
@@ -184,10 +194,10 @@ public class Elevator {
 
     /**
      * Если лифт вызвали из вне, он должен доехать до этажа, где его вызвали.
-     * @param floor Этаж, с которого его вызвали.
+     * @param call Информация о вызове.
      */
-    void receiveCall(int floor) {
-        selectedFloors.put(floor, true);
+    void receiveCall(Call call) {
+        calledByFloors.put(call.getDesiredFloor(), calledByFloors.get(call.getDesiredFloor()) == null ? call : call.merge(calledByFloors.get(call.getDesiredFloor())));
     }
 
     /**
@@ -201,14 +211,16 @@ public class Elevator {
         selectedFloors.put(currentFloor, false);
     }
 
+    void loadPeople(Floor floor) {
+
+    }
+
     /**
-     * Человек входит в лифт и нажимает на кнопку нужного этажа.
+     * Добавление человека в список экипажа.
      * @param person Человек, зашедший в лифт.
      */
     void addPerson(Person person) {
         people.add(person);
-
-        selectedFloors.put(person.getDesiredFloor(), true);
     }
 
     /**

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ua.varguss.domain.panel.outside.AbstractOuterPanel;
 
 /**
  * Человек
@@ -97,11 +98,11 @@ public class Person {
 
     /**
      * Позвать лифт на текущий этаж.
-     * @param elevator Лифт.
+     * @param outerPanel Внешняя панель вызова лифта.
      */
-    void callElevator(Elevator elevator) {
-        if (!isInsideElevator()) {
-            elevator.receiveCall(currentFloor);
+    void callElevator(AbstractOuterPanel outerPanel) {
+        if (!isInsideElevator() && !calledElevator) {
+            outerPanel.callElevator(desiredFloor);
             calledElevator = true;
             System.out.println("Человек по имени '" + name + "' позвал лифт на " + currentFloor + " этаж");
         }

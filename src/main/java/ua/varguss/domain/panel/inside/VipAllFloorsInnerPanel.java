@@ -12,6 +12,9 @@ public class VipAllFloorsInnerPanel extends AllFloorsInnerPanel {
 
     @Override
     public void getUsedBy(Person person) {
-        super.getUsedBy(person);
+        elevator.selectFloor(person.getDesiredFloor());
+
+        if (person.isVip())
+            elevator.selectVipFloor(person.getDesiredFloor());
     }
 }
