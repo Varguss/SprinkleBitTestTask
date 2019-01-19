@@ -1,13 +1,9 @@
 package ua.varguss.domain.panel.outside;
 
 import lombok.NonNull;
-import ua.varguss.domain.Call;
 import ua.varguss.domain.Elevator;
 import ua.varguss.domain.Floor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UpDownPanel extends AbstractOuterPanel {
     public UpDownPanel(@NonNull Elevator[] elevators, @NonNull Floor currentFloor) {
