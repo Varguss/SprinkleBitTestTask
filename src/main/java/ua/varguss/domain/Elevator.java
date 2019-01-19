@@ -20,16 +20,20 @@ import static ua.varguss.domain.Building.*;
 @ToString
 public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
+    private Map<Integer, Boolean> selectedFloorsByVip = new HashMap<>();
     private int currentFloor = 1, speed = 1, currentDistance = 0, currentWeight = 0, weightLimit = 700;
     private Direction direction = Direction.UP;
-    private List<Person> personsInside = new ArrayList<>();
+    private List<Person> people = new ArrayList<>();
+    private boolean isVipInside = false;
 
     @Setter
     private boolean isStopped;
 
     {
-        for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
+        for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++) {
             selectedFloors.put(i, false);
+            selectedFloorsByVip.put(i, false);
+        }
     }
 
     /**
@@ -59,6 +63,19 @@ public class Elevator {
         }
     }
 
+    /**
+     * Проверка, что внутри лифта есть VIP-персона.
+     */
+    private void validateVipInside() {
+        for (Person person : people) {
+            if (person.isVip()) {
+                isVipInside = true;
+                return;
+            }
+        }
+
+        isVipInside = false;
+    }
     /**
      * Если выбранные этажи и вызовы закончились, лифт останавливает работу.
      */
@@ -167,9 +184,9 @@ public class Elevator {
      * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
      */
     void releasePeople() {
-        for (int i = 0; i < personsInside.size(); i++)
-            if (personsInside.get(i).getDesiredFloor() == this.currentFloor)
-                personsInside.get(i--).getOut();
+        for (int i = 0; i < people.size(); i++)
+            if (people.get(i).getDesiredFloor() == this.currentFloor)
+                people.get(i--).getOut();
 
         selectedFloors.put(currentFloor, false);
     }
@@ -179,7 +196,7 @@ public class Elevator {
      * @param person Человек, зашедший в лифт.
      */
     void addPerson(Person person) {
-        personsInside.add(person);
+        people.add(person);
 
         selectedFloors.put(person.getDesiredFloor(), true);
     }
@@ -189,7 +206,7 @@ public class Elevator {
      * @param person Человек, покидающий лифт.
      */
     void removePerson(Person person) {
-        personsInside.remove(person);
+        people.remove(person);
     }
 
     /**

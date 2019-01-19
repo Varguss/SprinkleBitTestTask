@@ -60,7 +60,7 @@ public class Building {
      * Если лифт прибыл на новый этаж, значит, люди в этом лифте тоже прибыли на новый этаж.
      */
     private void updatePeopleInsideElevatorCurrentFloor() {
-        elevator.getPersonsInside().forEach(person -> person.setCurrentFloor(elevator.getCurrentFloor()));
+        elevator.getPeople().forEach(person -> person.setCurrentFloor(elevator.getCurrentFloor()));
     }
 
     /**

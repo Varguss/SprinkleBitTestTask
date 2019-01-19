@@ -17,6 +17,7 @@ public class Person {
     private int weight;
     private Elevator elevator;
     private boolean calledElevator;
+    private boolean vip;
 
     @Setter
     private int currentFloor;
@@ -25,6 +26,14 @@ public class Person {
         this.name = name;
         this.currentFloor = currentFloor;
         this.desiredFloor = desiredFloor;
+        this.weight = 70;
+    }
+
+    public Person(String name, int currentFloor, int desiredFloor, boolean vip) {
+        this.name = name;
+        this.currentFloor = currentFloor;
+        this.desiredFloor = desiredFloor;
+        this.vip = vip;
         this.weight = 70;
     }
 
@@ -67,6 +76,12 @@ public class Person {
             calledElevator = false;
 
             System.out.println("Человек по имени '" + name + "' вошел в лифт на " + currentFloor + " этаже");
+        }
+    }
+
+    void requestDesiredFloor() {
+        if (isInsideElevator()) {
+
         }
     }
 

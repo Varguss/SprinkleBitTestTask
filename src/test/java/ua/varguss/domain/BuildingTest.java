@@ -38,8 +38,8 @@ public class BuildingTest {
 
         building.moveElevator();
 
-        assertTrue(elevator.getPersonsInside().contains(firstPerson));
-        assertFalse(elevator.getPersonsInside().contains(toRelease));
+        assertTrue(elevator.getPeople().contains(firstPerson));
+        assertFalse(elevator.getPeople().contains(toRelease));
         assertFalse(building.getPersons().get(1).contains(toRelease));
     }
 }

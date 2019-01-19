@@ -36,18 +36,18 @@ public class ElevatorTest {
         toRelease.getIn(elevator);
         elevator.releasePeople();
 
-        assertTrue(!elevator.getPersonsInside().contains(toRelease));
+        assertTrue(!elevator.getPeople().contains(toRelease));
     }
 
     @Test
     public void addPerson() {
-        assertTrue(elevator.getPersonsInside().contains(firstPerson));
+        assertTrue(elevator.getPeople().contains(firstPerson));
     }
 
     @Test
     public void removePerson() {
         elevator.removePerson(firstPerson);
-        assertTrue(!elevator.getPersonsInside().contains(firstPerson));
+        assertTrue(!elevator.getPeople().contains(firstPerson));
     }
 
     @Test
