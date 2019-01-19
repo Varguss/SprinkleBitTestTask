@@ -1,6 +1,7 @@
 package ua.varguss.domain.panel.outside;
 
 import lombok.NonNull;
+import ua.varguss.domain.Call;
 import ua.varguss.domain.Elevator;
 
 public class UpDownPanel extends AbstractOuterPanel {
@@ -9,7 +10,7 @@ public class UpDownPanel extends AbstractOuterPanel {
     }
 
     @Override
-    public void callElevator(int desiredFloor) {
+    public void callElevator(Call call) {
         // TODO: don't forget to implement
     }
 }

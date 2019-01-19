@@ -36,7 +36,7 @@ public class Elevator {
      * Направления лифта
      */
     enum Direction {
-        UP, DOWN
+        UP, DOWN, NONE
     }
 
     /**
