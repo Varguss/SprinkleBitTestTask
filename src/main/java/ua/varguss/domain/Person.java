@@ -10,7 +10,7 @@ import ua.varguss.domain.panel.outside.AbstractOuterPanel;
  * Человек
  */
 @Getter
-@ToString
+@ToString(exclude = "elevator")
 @EqualsAndHashCode
 public class Person {
     private String name;
@@ -42,7 +42,7 @@ public class Person {
      * Человек внутри лифта?
      * @return true - внутри лифта, false - не в лифте.
      */
-    private boolean isInsideElevator() {
+    public boolean isInsideElevator() {
         return elevator != null;
     }
 
@@ -51,7 +51,7 @@ public class Person {
      * @return true - прибыл, false - не прибыл.
      */
     public boolean isArrived() {
-        return currentFloor == desiredFloor;
+        return currentFloor == desiredFloor && !isInsideElevator();
     }
 
     /**
@@ -74,13 +74,13 @@ public class Person {
         if (!isInsideElevator()) {
             elevator.addPerson(this);
             this.elevator = elevator;
-            calledElevator = false;
 
             System.out.println("Человек по имени '" + name + "' вошел в лифт на " + currentFloor + " этаже");
+            requestDesiredFloor();
         }
     }
 
-    void requestDesiredFloor() {
+    private void requestDesiredFloor() {
         if (isInsideElevator()) {
             elevator.getControlPanel().getUsedBy(this);
         }

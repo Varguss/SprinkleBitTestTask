@@ -28,11 +28,11 @@ public abstract class AbstractOuterPanel {
         List<Elevator> unidirectionalElevators = findUnidirectionalElevators(floor);
 
         if (!unidirectionalElevators.isEmpty()) {
-            int minimalDifference = Math.abs(unidirectionalElevators.get(0).getCurrentFloor() - floor);
+            int minimalDifference = Math.abs(unidirectionalElevators.get(0).getCurrentFloor() - floor) + unidirectionalElevators.get(0).getBusyIndicator();
 
             Elevator optimal = unidirectionalElevators.get(0);
             for (int i = 1; i < unidirectionalElevators.size(); i++) {
-                int difference = Math.abs(unidirectionalElevators.get(i).getCurrentFloor() - floor);
+                int difference = Math.abs(unidirectionalElevators.get(i).getCurrentFloor() - floor) + unidirectionalElevators.get(i).getBusyIndicator();
                 if (difference < minimalDifference) {
                     minimalDifference = difference;
                     optimal = unidirectionalElevators.get(i);
@@ -49,11 +49,11 @@ public abstract class AbstractOuterPanel {
             if (possibleElevators.isEmpty())
                 return false;
 
-            int minimalDifference = Math.abs(possibleElevators.get(0).getCurrentFloor() - floor);
+            int minimalDifference = Math.abs(possibleElevators.get(0).getCurrentFloor() - floor) + possibleElevators.get(0).getBusyIndicator();
 
             Elevator optimal = possibleElevators.get(0);
             for (int i = 1; i < possibleElevators.size(); i++) {
-                int difference = Math.abs(possibleElevators.get(i).getCurrentFloor() - floor);
+                int difference = Math.abs(possibleElevators.get(i).getCurrentFloor() - floor) + possibleElevators.get(i).getBusyIndicator();
                 if (difference < minimalDifference) {
                     minimalDifference = difference;
                     optimal = possibleElevators.get(i);

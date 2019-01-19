@@ -2,6 +2,11 @@ package ua.varguss.domain;
 
 import lombok.*;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
@@ -13,8 +18,13 @@ public class Call {
     @NonNull
     private Elevator.Direction[] directions;
 
-    public Call merge(Call another) {
-        Elevator.Direction[] directions = new Elevator.Direction[Math.max(this.directions.length, another.directions.length)];
+    Call merge(Call another) {
+        Set<Elevator.Direction> foundedDirections = new HashSet<>();
+
+        Collections.addAll(foundedDirections, this.directions);
+        Collections.addAll(foundedDirections, another.directions);
+
+        Elevator.Direction[] directions = new Elevator.Direction[foundedDirections.size()];
 
         int lastIndex = mergeDirections(directions, this.directions, 0);
         mergeDirections(directions, another.directions, lastIndex);
@@ -34,7 +44,7 @@ public class Call {
             }
 
             if (!contains) {
-                directions[fromIndex++] = thisDirection;
+                targetDirections[fromIndex++] = thisDirection;
             }
         }
 

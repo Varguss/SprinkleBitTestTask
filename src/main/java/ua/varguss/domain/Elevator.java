@@ -22,7 +22,7 @@ public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
     private Map<Integer, Boolean> selectedFloorsByVip = new HashMap<>();
     private Map<Integer, Call> calledByFloors = new HashMap<>();
-    private int currentFloor = 1, speed = 1, currentDistance = 0, currentWeight = 0, weightLimit = 700;
+    private int currentFloor = 1, speed = 1, currentDistance = 0, currentWeight = 0, weightLimit = 700, elevatorNumber;
     private Direction direction = Direction.UP;
     private List<Person> people = new ArrayList<>();
     private AbstractInnerPanel controlPanel;
@@ -30,6 +30,8 @@ public class Elevator {
 
     @Setter
     private boolean isVipInside;
+
+    private static int numberCounter = 1;
 
     public Elevator(Class<? extends AbstractInnerPanel> controlPanelClass) {
         try {
@@ -43,6 +45,8 @@ public class Elevator {
             selectedFloors.put(i, false);
             selectedFloorsByVip.put(i, false);
         }
+
+        this.elevatorNumber = numberCounter++;
     }
 
     /**
@@ -60,6 +64,7 @@ public class Elevator {
         validateMoving();
 
         if (!isStopped) {
+            validateWishes();
             validateDirection();
 
             switch (direction) {
@@ -88,6 +93,13 @@ public class Elevator {
         isVipInside = true;
     }
 
+    private void validateWishes() {
+        for (Person person : people) {
+            if (person.isVip())
+                selectedFloorsByVip.put(person.getDesiredFloor(), true);
+            selectedFloors.put(person.getDesiredFloor(), true);
+        }
+    }
     /**
      * Проверка, что внутри лифта есть VIP-персона.
      */
@@ -95,7 +107,7 @@ public class Elevator {
         for (Person person : people) {
             if (person.isVip()) {
                 isVipInside = true;
-                return;
+                selectedFloorsByVip.put(person.getDesiredFloor(), true);
             }
         }
 
@@ -107,7 +119,7 @@ public class Elevator {
     private void validateMoving() {
         if (!isAnySelectedFloor() && !isStopped) {
             setStopped(true);
-            System.out.println("Лифт: выбранных этажов или вызовов нет, остановка");
+            System.out.println("Лифт #" + elevatorNumber + ": выбранных этажов или вызовов нет, остановка на " + currentFloor + " этаже");
         }
     }
     /**
@@ -118,15 +130,42 @@ public class Elevator {
             case UP: {
                 if (!isAnySelectedFloorAbove()) {
                     direction = Direction.DOWN;
-                    System.out.println("Лифт: движение вверх бессмысленно. Смена направления на " + direction.name());
+                    System.out.println("Лифт #" + elevatorNumber + ": движение вверх бессмысленно. Смена направления на " + direction.name());
                 }
             } break;
             case DOWN: {
                 if (!isAnySelectedFloorBelow()) {
                     direction = Direction.UP;
-                    System.out.println("Лифт: движение вниз бессмысленно. Смена направления на " + direction.name());
+                    System.out.println("Лифт #" + elevatorNumber + ": движение вниз бессмысленно. Смена направления на " + direction.name());
                 }
             } break;
+        }
+    }
+
+    /**
+     * Обновление этажа людей
+     */
+    private void updatePeopleCurrentFloor() {
+        people.forEach(people -> people.setCurrentFloor(currentFloor));
+    }
+
+    /**
+     * Событие "прибытие на новый этаж"
+     */
+    private void fireEventNextFloor() {
+        System.out.println("Лифт #" + elevatorNumber + ": прибытие на следующий этаж - " + currentFloor);
+
+        updatePeopleCurrentFloor();
+
+        if (!isVipInside || selectedFloorsByVip.get(currentFloor)) {
+            if (selectedFloors.get(currentFloor)) {
+                System.out.println("Лифт #" + elevatorNumber + ": открытие дверей");
+                releasePeople();
+            } else {
+                System.out.println("Лифт #" + elevatorNumber + ": людей, желающих выйти или войти, нет");
+            }
+        } else {
+            System.out.println("Лифт #" + elevatorNumber + ": внутри вип-персона, нет возможности остановиться.");
         }
     }
     /**
@@ -134,13 +173,13 @@ public class Elevator {
      */
     private void moveUp() {
         currentDistance += speed;
-        System.out.println("Лифт: движение вверх! Пройдено " + currentDistance + "м по шахте, осталось " + (FLOOR_HEIGHT - currentDistance) + "м до следующего этажа");
+        System.out.println("Лифт #" + elevatorNumber + ": движение вверх! Пройдено " + currentDistance + "м по шахте, осталось " + (FLOOR_HEIGHT - currentDistance) + "м до следующего этажа, текущая загруженность лифта: " + currentWeight);
 
         if (currentDistance == FLOOR_HEIGHT) {
             currentDistance = 0;
             currentFloor++;
 
-            System.out.println("Лифт: прибытие на следующий этаж - " + currentFloor);
+            fireEventNextFloor();
         }
     }
 
@@ -149,13 +188,13 @@ public class Elevator {
      */
     private void moveDown() {
         currentDistance -= speed;
-        System.out.println("Лифт: движение вниз! Пройдено " + (-currentDistance) + "м по шахте, осталось " + (FLOOR_HEIGHT + currentDistance) + "м до следующего этажа");
+        System.out.println("Лифт #" + elevatorNumber + ": движение вниз! Пройдено " + (-currentDistance) + "м по шахте, осталось " + (FLOOR_HEIGHT + currentDistance) + "м до следующего этажа, текущая загруженность лифта: " + currentWeight);
 
         if (currentDistance == -FLOOR_HEIGHT) {
             currentDistance = 0;
             currentFloor--;
 
-            System.out.println("Лифт: прибытие на следующий этаж - " + currentFloor);
+            fireEventNextFloor();
         }
     }
 
@@ -206,27 +245,39 @@ public class Elevator {
         selectFloor(call.getDesiredFloor());
     }
 
+    public int getBusyIndicator() {
+        return (int) selectedFloors.values().stream().filter(value -> value).count();
+    }
     /**
      * Люди, прибывшие на этаж, который хотели, покидают лифт. Так же, на данный этаж больше никому не нужно.
      */
     void releasePeople() {
-        for (int i = 0; i < people.size(); i++)
-            if (people.get(i).getDesiredFloor() == this.currentFloor)
+        for (int i = 0; i < people.size(); i++) {
+            if (people.get(i).getDesiredFloor() == this.currentFloor) {
+                Person person = people.get(i);
                 people.get(i--).getOut();
+
+                if (person.isVip()) {
+                    selectedFloorsByVip.put(currentFloor, false);
+                    validateVipInside();
+                }
+            }
+        }
 
         selectedFloors.put(currentFloor, false);
     }
 
-    void loadPeople(Floor floor) {
-
-    }
-
     /**
-     * Добавление человека в список экипажа.
+     * Добавление человека в список экипажа, если не достигнут лимит веса.
      * @param person Человек, зашедший в лифт.
      */
     void addPerson(Person person) {
-        people.add(person);
+        if (this.currentWeight + person.getWeight() <= this.weightLimit) {
+            people.add(person);
+            this.currentWeight += person.getWeight();
+        } else {
+            selectFloor(this.getCurrentFloor());
+        }
     }
 
     /**
@@ -234,7 +285,12 @@ public class Elevator {
      * @param person Человек, покидающий лифт.
      */
     void removePerson(Person person) {
-        people.remove(person);
+        if (people.remove(person)) {
+            this.currentWeight -= person.getWeight();
+
+            if (person.isVip())
+                selectedFloorsByVip.put(person.getDesiredFloor(), false);
+        }
     }
 
     /**

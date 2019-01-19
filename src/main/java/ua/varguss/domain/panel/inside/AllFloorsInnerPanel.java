@@ -12,6 +12,8 @@ public class AllFloorsInnerPanel extends AbstractInnerPanel {
 
     @Override
     public void getUsedBy(Person person) {
-        elevator.selectFloor(person.getDesiredFloor());
+        if (elevator.getCurrentWeight() + person.getWeight() < elevator.getWeightLimit()) {
+            elevator.selectFloor(person.getDesiredFloor());
+        }
     }
 }

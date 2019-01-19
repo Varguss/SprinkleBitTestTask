@@ -1,7 +1,6 @@
 package ua.varguss.domain;
 
 import lombok.*;
-import ua.varguss.domain.panel.inside.AllFloorsInnerPanel;
 import ua.varguss.domain.panel.inside.FirstLastFloorsInnerPanel;
 import ua.varguss.domain.panel.inside.VipAllFloorsInnerPanel;
 
@@ -42,36 +41,39 @@ public class Building {
         System.out.println("Человек по имени '" + person.getName() + "' в доме. Сейчас он на " + person.getCurrentFloor() + " этаже, нужно на " + person.getDesiredFloor() + " этаж");
     }
 
+    public boolean hasActiveElevators() {
+        for (Elevator elevator : elevators)
+            if (!elevator.isStopped())
+                return true;
+        return false;
+    }
     /**
      * Осуществляет контроль движения лифта и людей внутри здания.
      */
     public void moveElevator() {
         makePeopleCallElevator();
+        cleanArrivedPeople();
 
-        if (!elevators[0].isMoving()) {
-            fillElevatorWithPeople();
-            elevators[0].releasePeople();
-            cleanArrivedPeople();
+        for (Elevator elevator : elevators) {
+            if (!elevator.isMoving()) {
+                fillElevatorsWithPeople();
+            }
+
+            elevator.move();
         }
-
-        elevators[0].move();
-
-        if (!elevators[0].isMoving())
-            updatePeopleInsideElevatorCurrentFloor();
-    }
-
-    /**
-     * Если лифт прибыл на новый этаж, значит, люди в этом лифте тоже прибыли на новый этаж.
-     */
-    private void updatePeopleInsideElevatorCurrentFloor() {
-        elevators[0].getPeople().forEach(person -> person.setCurrentFloor(elevators[0].getCurrentFloor()));
     }
 
     /**
      * Если на текущем этаже лифта есть люди, они входят в лифт.
      */
-    private void fillElevatorWithPeople() {
-        floors.get(elevators[0].getCurrentFloor()).getPeople().forEach(person -> person.getIn(elevators[0]));
+    private void fillElevatorsWithPeople() {
+        for (Elevator elevator : elevators) {
+            if ((!elevator.isVipInside() || elevator.getSelectedFloorsByVip().get(elevator.getCurrentFloor())) && !elevator.isStopped())
+                floors.get(elevator.getCurrentFloor()).getPeople().forEach(person -> {
+                    if (!person.isInsideElevator() && !person.isArrived())
+                        person.getIn(elevator);
+                });
+        }
     }
 
     /**

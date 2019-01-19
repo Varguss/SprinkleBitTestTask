@@ -2,12 +2,13 @@ package ua.varguss.domain;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.varguss.domain.panel.inside.AllFloorsInnerPanel;
 
 import static org.junit.Assert.*;
 
 public class PersonTest {
     private Person person = new Person("Test", 1, 4);
-    private Elevator elevator = new Elevator();
+    private Elevator elevator = new Elevator(AllFloorsInnerPanel.class);
 
     @Test
     public void isInsideElevator() {
@@ -45,18 +46,5 @@ public class PersonTest {
         assertTrue(elevator.isStopped());
         person.pushStopButton();
         assertTrue(!elevator.isStopped());
-    }
-
-    @Test
-    public void callElevator() {
-        person.callElevator(elevator);
-        assertTrue(elevator.getSelectedFloors().get(person.getCurrentFloor()));
-    }
-
-    @Test
-    public void isCalledElevator() {
-        assertFalse(person.isCalledElevator());
-        person.callElevator(elevator);
-        assertTrue(person.isCalledElevator());
     }
 }

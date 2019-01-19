@@ -13,9 +13,11 @@ public class FirstLastFloorsInnerPanel extends AbstractInnerPanel {
 
     @Override
     public void getUsedBy(Person person) {
-        if (person.getDesiredFloor() < elevator.getCurrentFloor())
-            elevator.selectFloor(MIN_FLOOR);
-        else
-            elevator.selectFloor(MAX_FLOOR);
+        if (elevator.getCurrentWeight() + person.getWeight() < elevator.getWeightLimit()) {
+            if (person.getDesiredFloor() < elevator.getCurrentFloor())
+                elevator.selectFloor(MIN_FLOOR);
+            else
+                elevator.selectFloor(MAX_FLOOR);
+        }
     }
 }

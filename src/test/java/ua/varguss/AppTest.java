@@ -9,8 +9,7 @@ import ua.varguss.domain.Person;
 import static org.junit.Assert.*;
 
 public class AppTest {
-    private Elevator elevator = new Elevator();
-    private Building building = new Building(elevator);
+    private Building building = new Building();
 
     private Person firstPerson = new Person("Stephan", 1, 4);
     private Person secondPerson = new Person("Ivan", 3, 2);
@@ -25,7 +24,7 @@ public class AppTest {
 
     @Test
     public void main() {
-        while (!elevator.isStopped()) {
+        while (building.hasActiveElevators()) {
             building.moveElevator();
         }
 

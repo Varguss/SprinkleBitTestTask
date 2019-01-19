@@ -2,11 +2,14 @@ package ua.varguss.domain;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.varguss.domain.panel.inside.AbstractInnerPanel;
+import ua.varguss.domain.panel.inside.AllFloorsInnerPanel;
+import ua.varguss.domain.panel.outside.SingleButtonPanel;
 
 import static org.junit.Assert.*;
 
 public class ElevatorTest {
-    private Elevator elevator = new Elevator();
+    private Elevator elevator = new Elevator(AllFloorsInnerPanel.class);
 
     private Person firstPerson = new Person("Stephan", 1, 4);
     private Person secondPerson = new Person("Ivan", 3, 2);
@@ -21,13 +24,6 @@ public class ElevatorTest {
         elevator.move();
 
         assertTrue(elevator.isMoving());
-    }
-
-    @Test
-    public void receiveCall() {
-        secondPerson.callElevator(elevator);
-
-        assertTrue(elevator.getSelectedFloors().get(3));
     }
 
     @Test
