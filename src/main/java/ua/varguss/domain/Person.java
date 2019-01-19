@@ -14,6 +14,7 @@ import lombok.ToString;
 public class Person {
     private String name;
     private int desiredFloor;
+    private int weight;
     private Elevator elevator;
     private boolean calledElevator;
 
@@ -24,6 +25,7 @@ public class Person {
         this.name = name;
         this.currentFloor = currentFloor;
         this.desiredFloor = desiredFloor;
+        this.weight = 70;
     }
 
     /**

@@ -1,10 +1,7 @@
 package ua.varguss.domain;
 
 import lombok.*;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,9 +11,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Building {
     /**
-     * Ключ - номер этажа, на котором люди находились изначально, значение - список людей, которые находились на этом этаже.
+     * Ключ - номер этажа, значение - этаж.
      */
-    private Map<Integer, List<Person>> persons = new HashMap<>();
+    private Map<Integer, Floor> floors = new HashMap<>();
 
     /**
      * Лифт внутри здания.
@@ -27,57 +24,9 @@ public class Building {
 
     static final int MIN_FLOOR = 1, MAX_FLOOR = 4, FLOOR_HEIGHT = 4;
 
-    @Getter
-    @Setter
-    @ToString
-    @EqualsAndHashCode
-    @RequiredArgsConstructor
-    class Floor {
-        private List<Person> people = new ArrayList<>();
-
-        @NonNull
-        private int number;
-        @NonNull
-        private int height;
-        @NonNull
-        private AbstractOuterPanel outerPanel;
-
-        @Getter
-        @Setter
-        @RequiredArgsConstructor
-        abstract class AbstractOuterPanel {
-            @NonNull
-            private Elevator elevator;
-
-            public abstract void callElevator(int desiredFloor);
-        }
-
-        class UpDownPanel extends AbstractOuterPanel {
-            public UpDownPanel(@NonNull Elevator elevator) {
-                super(elevator);
-            }
-
-            @Override
-            public void callElevator(int desiredFloor) {
-                // TODO: don't forget to implement
-            }
-        }
-
-        class SingleButtonPanel extends AbstractOuterPanel {
-            public SingleButtonPanel(@NonNull Elevator elevator) {
-                super(elevator);
-            }
-
-            @Override
-            public void callElevator(int desiredFloor) {
-                // TODO: don't forget to implement
-            }
-        }
-    }
-
     {
         for (int i = MIN_FLOOR; i <= MAX_FLOOR; i++)
-            persons.put(i, new ArrayList<>());
+            floors.put(i, new Floor(elevator, i, FLOOR_HEIGHT));
     }
 
     /**
@@ -85,8 +34,7 @@ public class Building {
      * @param person Человек.
      */
     public void addPerson(Person person) {
-        persons.get(person.getCurrentFloor()).add(person);
-
+        floors.get(person.getCurrentFloor()).addPerson(person);
         System.out.println("Человек по имени '" + person.getName() + "' в доме. Сейчас он на " + person.getCurrentFloor() + " этаже, нужно на " + person.getDesiredFloor() + " этаж");
     }
 
@@ -119,21 +67,21 @@ public class Building {
      * Если на текущем этаже лифта есть люди, они входят в лифт.
      */
     private void fillElevatorWithPeople() {
-        persons.get(elevator.getCurrentFloor()).forEach(person -> person.getIn(elevator));
+        floors.get(elevator.getCurrentFloor()).getPeople().forEach(person -> person.getIn(elevator));
     }
 
     /**
      * Люди, которые успешно добрались до нужного этажа, очищаются.
      */
     private void cleanArrivedPeople() {
-        persons.values().forEach(peopleOnFloor -> peopleOnFloor.removeIf(Person::isArrived));
+        floors.values().forEach(floor -> floor.getPeople().removeIf(Person::isArrived));
     }
 
     /**
      * Люди должны вызвать лифт, чтобы он гарантировано забрал их.
      */
     private void makePeopleCallElevator() {
-        persons.values().forEach(people -> people.forEach(person -> {
+        floors.values().forEach(floor -> floor.getPeople().forEach(person -> {
             if (!person.isInsideElevator() && !person.isCalledElevator())
                 person.callElevator(elevator);
         }));

@@ -20,7 +20,7 @@ import static ua.varguss.domain.Building.*;
 @ToString
 public class Elevator {
     private Map<Integer, Boolean> selectedFloors = new HashMap<>();
-    private int currentFloor = 1, speed = 1, currentDistance = 0;
+    private int currentFloor = 1, speed = 1, currentDistance = 0, currentWeight = 0, weightLimit = 700;
     private Direction direction = Direction.UP;
     private List<Person> personsInside = new ArrayList<>();
 
@@ -35,8 +35,24 @@ public class Elevator {
     /**
      * Направления лифта
      */
-    private enum Direction {
+    enum Direction {
         UP, DOWN
+    }
+
+    abstract class AbstractInnerPanel {
+
+    }
+
+    class AllFloorsInnerPanel extends AbstractInnerPanel {
+
+    }
+
+    class FirstLastFloorsInnerPanel extends AbstractInnerPanel {
+
+    }
+
+    class VipAllFloorsInnerPanel extends AllFloorsInnerPanel {
+
     }
 
     /**
