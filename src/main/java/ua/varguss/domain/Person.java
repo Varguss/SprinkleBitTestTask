@@ -81,7 +81,7 @@ public class Person {
 
     void requestDesiredFloor() {
         if (isInsideElevator()) {
-
+            elevator.getControlPanel().getUsedBy(this);
         }
     }
 

@@ -2,6 +2,7 @@ package ua.varguss.domain.panel.inside;
 
 import lombok.NonNull;
 import ua.varguss.domain.Elevator;
+import ua.varguss.domain.Person;
 
 public class VipAllFloorsInnerPanel extends AllFloorsInnerPanel {
 
@@ -10,7 +11,7 @@ public class VipAllFloorsInnerPanel extends AllFloorsInnerPanel {
     }
 
     @Override
-    public void selectFloor(int floor) {
-        super.selectFloor(floor);
+    public void getUsedBy(Person person) {
+        super.getUsedBy(person);
     }
 }

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ua.varguss.domain.panel.inside.AbstractInnerPanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class Elevator {
     private Direction direction = Direction.UP;
     private List<Person> people = new ArrayList<>();
     private boolean isVipInside = false;
+    private AbstractInnerPanel controlPanel;
 
     @Setter
     private boolean isStopped;

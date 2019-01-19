@@ -2,6 +2,7 @@ package ua.varguss.domain.panel.inside;
 
 import lombok.NonNull;
 import ua.varguss.domain.Elevator;
+import ua.varguss.domain.Person;
 
 public class AllFloorsInnerPanel extends AbstractInnerPanel {
 
@@ -10,7 +11,7 @@ public class AllFloorsInnerPanel extends AbstractInnerPanel {
     }
 
     @Override
-    public void selectFloor(int floor) {
+    public void getUsedBy(Person person) {
 
     }
 }

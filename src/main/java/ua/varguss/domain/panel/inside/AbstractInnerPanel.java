@@ -3,11 +3,12 @@ package ua.varguss.domain.panel.inside;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ua.varguss.domain.Elevator;
+import ua.varguss.domain.Person;
 
 @RequiredArgsConstructor
 public abstract class AbstractInnerPanel {
     @NonNull
-    private Elevator elevator;
+    protected Elevator elevator;
 
-    public abstract void selectFloor(int floor);
+    public abstract void getUsedBy(Person person);
 }
