@@ -1,2 +1,2 @@
 # SprinkleBitTestTask
-Test task part #1.
+Test task.
