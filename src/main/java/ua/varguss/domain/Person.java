@@ -42,7 +42,7 @@ public class Person {
      * Человек внутри лифта?
      * @return true - внутри лифта, false - не в лифте.
      */
-    boolean isInsideElevator() {
+    private boolean isInsideElevator() {
         return elevator != null;
     }
 
@@ -102,9 +102,12 @@ public class Person {
      */
     void callElevator(AbstractOuterPanel outerPanel) {
         if (!isInsideElevator() && !calledElevator) {
-            outerPanel.callElevator(desiredFloor);
-            calledElevator = true;
-            System.out.println("Человек по имени '" + name + "' позвал лифт на " + currentFloor + " этаж");
+            if(outerPanel.callElevator(desiredFloor)) {
+                calledElevator = true;
+                System.out.println("Человек по имени '" + name + "' позвал лифт на " + currentFloor + " этаж");
+            } else {
+                System.out.println("Человек по имени '" + name + "' позвал лифт на " + currentFloor + " этаж, однако вип-персоны заняли все лифты, гады!");
+            }
         }
     }
 }

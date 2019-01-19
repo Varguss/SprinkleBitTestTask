@@ -11,7 +11,7 @@ public class UpDownPanel extends AbstractOuterPanel {
     }
 
     @Override
-    public void callElevator(int floor) {
-        callElevator(floor, new Elevator.Direction[] { floor < this.currentFloor.getNumber() ? Elevator.Direction.DOWN : Elevator.Direction.UP });
+    public boolean callElevator(int floor) {
+        return callElevator(floor, new Elevator.Direction[] { floor < this.currentFloor.getNumber() ? Elevator.Direction.DOWN : Elevator.Direction.UP });
     }
 }

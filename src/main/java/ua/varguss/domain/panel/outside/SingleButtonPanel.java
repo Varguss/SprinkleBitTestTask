@@ -10,7 +10,7 @@ public class SingleButtonPanel extends AbstractOuterPanel {
     }
 
     @Override
-    public void callElevator(int floor) {
-        callElevator(floor, new Elevator.Direction[] { Elevator.Direction.NONE });
+    public boolean callElevator(int floor) {
+        return callElevator(floor, new Elevator.Direction[] { Elevator.Direction.NONE });
     }
 }

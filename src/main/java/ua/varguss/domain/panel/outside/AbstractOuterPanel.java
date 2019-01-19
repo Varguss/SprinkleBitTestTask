@@ -22,9 +22,9 @@ public abstract class AbstractOuterPanel {
     @NonNull
     protected Floor currentFloor;
 
-    public abstract void callElevator(int floor);
+    public abstract boolean callElevator(int floor);
 
-    void callElevator(int floor, Elevator.Direction[] directions) {
+    boolean callElevator(int floor, Elevator.Direction[] directions) {
         List<Elevator> unidirectionalElevators = findUnidirectionalElevators(floor);
 
         if (!unidirectionalElevators.isEmpty()) {
@@ -40,10 +40,14 @@ public abstract class AbstractOuterPanel {
             }
 
             optimal.receiveCall(new Call(floor, directions));
+            return true;
         } else {
             List<Elevator> possibleElevators = Stream.of(elevators)
                     .filter(elevator -> !elevator.isVipInside() || elevator.getSelectedFloorsByVip().get(floor))
                     .collect(Collectors.toList());
+
+            if (possibleElevators.isEmpty())
+                return false;
 
             int minimalDifference = Math.abs(possibleElevators.get(0).getCurrentFloor() - floor);
 
@@ -57,6 +61,7 @@ public abstract class AbstractOuterPanel {
             }
 
             optimal.receiveCall(new Call(floor, directions));
+            return true;
         }
     }
 
