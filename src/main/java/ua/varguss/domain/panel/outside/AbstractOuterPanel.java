@@ -11,7 +11,7 @@ import ua.varguss.domain.Elevator;
 @RequiredArgsConstructor
 public abstract class AbstractOuterPanel {
     @NonNull
-    private Elevator elevator;
+    protected Elevator elevator;
 
     public abstract void callElevator(int desiredFloor);
 }

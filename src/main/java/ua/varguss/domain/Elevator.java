@@ -39,22 +39,6 @@ public class Elevator {
         UP, DOWN
     }
 
-    abstract class AbstractInnerPanel {
-
-    }
-
-    class AllFloorsInnerPanel extends AbstractInnerPanel {
-
-    }
-
-    class FirstLastFloorsInnerPanel extends AbstractInnerPanel {
-
-    }
-
-    class VipAllFloorsInnerPanel extends AllFloorsInnerPanel {
-
-    }
-
     /**
      * Начать движение лифта.
      */
