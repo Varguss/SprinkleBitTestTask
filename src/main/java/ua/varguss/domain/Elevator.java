@@ -26,8 +26,6 @@ public class Elevator {
     private Direction direction = Direction.UP;
     private List<Person> people = new ArrayList<>();
     private AbstractInnerPanel controlPanel;
-
-    @Setter
     private boolean isStopped;
 
     @Setter
@@ -50,9 +48,10 @@ public class Elevator {
     /**
      * Направления лифта
      */
-    enum Direction {
+    public enum Direction {
         UP, DOWN, NONE
     }
+
 
     /**
      * Начать движение лифта.
@@ -72,6 +71,12 @@ public class Elevator {
                 } break;
             }
         }
+    }
+
+    public void setStopped(boolean isStopped) {
+        if (isStopped)
+            this.direction = Direction.NONE;
+        this.isStopped = isStopped;
     }
 
     public void selectFloor(int floor) {
@@ -101,7 +106,7 @@ public class Elevator {
      */
     private void validateMoving() {
         if (!isAnySelectedFloor() && !isStopped) {
-            isStopped = true;
+            setStopped(true);
             System.out.println("Лифт: выбранных этажов или вызовов нет, остановка");
         }
     }
@@ -196,8 +201,9 @@ public class Elevator {
      * Если лифт вызвали из вне, он должен доехать до этажа, где его вызвали.
      * @param call Информация о вызове.
      */
-    void receiveCall(Call call) {
+    public void receiveCall(Call call) {
         calledByFloors.put(call.getDesiredFloor(), calledByFloors.get(call.getDesiredFloor()) == null ? call : call.merge(calledByFloors.get(call.getDesiredFloor())));
+        selectFloor(call.getDesiredFloor());
     }
 
     /**

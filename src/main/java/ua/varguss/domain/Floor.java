@@ -22,7 +22,7 @@ public class Floor {
     private int height;
 
     public Floor(Elevator[] elevators, int number, int height) {
-        this.outerPanel = Math.random() > 0.5d ? new UpDownPanel(elevators) : new SingleButtonPanel(elevators);
+        this.outerPanel = Math.random() > 0.5d ? new UpDownPanel(elevators, this) : new SingleButtonPanel(elevators, this);
         this.number = number;
         this.height = height;
     }
